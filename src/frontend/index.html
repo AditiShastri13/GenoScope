@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genoscope - Genetic Mutation Analysis</title>
+    <link rel="stylesheet" href="enhanced-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-dna"></i> Genoscope</h1>
+            <p>Genetic Mutation Detection Tool</p>
+            <div class="model-badges">
+                <span class="badge breast-cancer">
+                    <i class="fas fa-ribbon"></i> Breast Cancer: 92.5%
+                </span>
+                <span class="badge sickle-cell">
+                    <i class="fas fa-heartbeat"></i> Sickle Cell: 95%
+                </span>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="file-upload">File Upload</button>
+            <button class="tab-btn" data-tab="direct-sequence">Direct Sequence</button>
+            <button class="tab-btn" data-tab="model-info">Model Info</button>
+        </div>
+
+        <div class="tab-content active" id="file-upload">
+            <div class="card">
+                <h2>Upload Genetic Sequence File</h2>
+                <p>Upload a FASTA or CSV file containing genetic sequence data.</p>
+                
+                <form id="upload-form">
+                    <div class="form-group">
+                        <label for="file-input">Select File:</label>
+                        <div class="file-input-container">
+                            <input type="file" id="file-input" accept=".fasta,.fa,.csv">
+                            <div class="file-name" id="file-name">No file selected</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="disease-select">Target Disease:</label>
+                        <select id="disease-select">
+                            <option value="comprehensive">Comprehensive Analysis</option>
+                            <option value="sickle_cell">Sickle Cell Anemia</option>
+                            <option value="breast_cancer">Breast Cancer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="version-select">Model Version:</label>
+                        <select id="version-select">
+                            <option value="latest">Latest Version</option>
+                            <!-- Other versions will be populated dynamically -->
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn primary-btn">
+                        <i class="fas fa-dna"></i> Analyze Sequence
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="tab-content" id="direct-sequence">
+            <div class="card">
+                <h2>Analyze Direct Sequence</h2>
+                <p>Enter a genetic sequence directly for analysis.</p>
+                
+                <form id="sequence-form">
+                    <div class="form-group">
+                        <label for="sequence-input">Genetic Sequence:</label>
+                        <textarea id="sequence-input" rows="10" placeholder="Enter DNA sequence (A, T, G, C bases)" required></textarea>
+                        <div class="sequence-stats">
+                            <span id="sequence-length">Length: 0 bases</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="direct-disease-select">Target Disease:</label>
+                        <select id="direct-disease-select">
+                            <option value="comprehensive">Comprehensive Analysis</option>
+                            <option value="sickle_cell">Sickle Cell Anemia</option>
+                            <option value="breast_cancer">Breast Cancer</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn primary-btn">
+                        <i class="fas fa-dna"></i> Analyze Sequence
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="tab-content" id="model-info">
+            <div class="card">
+                <h2>Model Information</h2>
+                <p>View and manage model versions.</p>
+                
+                <button id="refresh-models-btn" class="btn secondary-btn">
+                    <i class="fas fa-sync-alt"></i> Refresh Model Info
+                </button>
+                <button id="train-models-btn" class="btn secondary-btn">
+                    <i class="fas fa-cogs"></i> Train Demo Models
+                </button>
+                
+                <div class="models-container">
+                    <div class="model-box">
+                        <h3>Sickle Cell Anemia Models</h3>
+                        <div id="sickle-cell-models" class="model-info-content">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                    <div class="model-box">
+                        <h3>Breast Cancer Models</h3>
+                        <div id="breast-cancer-models" class="model-info-content">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="results-container" class="hidden">
+            <div class="card result-card">
+                <div class="result-header">
+                    <h2>Analysis Results</h2>
+                    <button class="btn close-btn" id="close-results">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="result-content">
+                    <div id="result-status" class="result-status">
+                        <div class="loader"></div>
+                        <p>Analyzing sequence...</p>
+                    </div>
+                    
+                    <div id="result-details" class="hidden">
+                        <div class="result-summary"></div>
+                        <div class="result-metrics"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Genoscope - Genetic Analysis Tool</p>
+    </footer>
+
+    <script src="enhanced-app.js"></script>
+</body>
+</html>

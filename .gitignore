@@ -4,3 +4,6 @@ dist
 build 
 .DS_Store 
 .vscode 
+
+data/raw/clinvar/clinvar.vcf.gz
+# Large ClinVar data files (download using scripts instead)
