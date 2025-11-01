@@ -2,8 +2,8 @@
   "model_name": "XGBoost",
   "data_source": "ClinVar_real_variants",
   "test_accuracy": 0.801762114537445,
-  "cv_mean": 0.8289033565942848,
-  "cv_std": 0.015865772208967534,
+  "cv_mean": 0.82713734357335,
+  "cv_std": 0.01839083875207057,
   "training_samples": 907,
   "test_samples": 227,
   "features_used": 93

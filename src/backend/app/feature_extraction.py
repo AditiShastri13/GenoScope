@@ -55,34 +55,22 @@ class GeneticFeatureExtractor:
             mutant_count / max(normal_count + mutant_count, 1)
         )
         
-        # Add all 16 dinucleotides (essential for trained model)
-        dinucleotides = ['AA', 'AT', 'AG', 'AC', 'TA', 'TT', 'TG', 'TC',
-                        'GA', 'GT', 'GG', 'GC', 'CA', 'CT', 'CG', 'CC']
-        for dinuc in dinucleotides:
-            count = sequence.count(dinuc)
-            features[f'dinuc_{dinuc}'] = count / max(len(sequence) - 1, 1)
+        # Gene-specific motifs (required by production model)
+        features['bcl11a_motif'] = float('GATAAG' in sequence)
+        features['myb_motif'] = float('CAATGG' in sequence)
         
-        # K-mer analysis (8 key k-mers)
-        sc_kmers = ['ATG', 'GTG', 'TAG', 'TAA', 'TGA', 'GAG', 'GTT', 'GTC']
+        # Promoter and enhancer regions
+        features['hbg_promoter_present'] = float('CACCC' in sequence or 'CCAAT' in sequence)
+        features['hbg_promoter_count'] = (sequence.count('CACCC') + sequence.count('CCAAT')) / max(len(sequence) - 4, 1)
+        features['beta_globin_enhancer_present'] = float('TGAGG' in sequence or 'GCTGG' in sequence)
+        features['beta_globin_enhancer_count'] = (sequence.count('TGAGG') + sequence.count('GCTGG')) / max(len(sequence) - 4, 1)
+        features['gamma_globin_regulator_present'] = float('ATGGG' in sequence or 'GGCGG' in sequence)
+        features['gamma_globin_regulator_count'] = (sequence.count('ATGGG') + sequence.count('GGCGG')) / max(len(sequence) - 4, 1)
+        
+        # K-mer analysis (use the exact k-mers from training)
+        sc_kmers = ['GTC', 'GAC', 'GTG', 'CAC', 'CCT']
         for kmer in sc_kmers:
             features[f'kmer_{kmer}'] = sequence.count(kmer) / max(len(sequence) - 2, 1)
-        
-        # Advanced features
-        features['sequence_entropy'] = self._calculate_entropy(sequence)
-        features['cpg_islands'] = self._count_cpg_islands(sequence)
-        features['homopolymer_runs'] = self._count_homopolymer_runs(sequence)
-        
-        # Purine/Pyrimidine ratio
-        purines = sequence.count('A') + sequence.count('G')
-        pyrimidines = sequence.count('C') + sequence.count('T')
-        features['purine_pyrimidine_ratio'] = purines / max(pyrimidines, 1)
-        
-        # Transition/Transversion ratio (estimated from sequence composition)
-        features['transition_transversion_ratio'] = 1.0  # Placeholder
-        
-        # Stop codons
-        stop_codons = ['TAA', 'TAG', 'TGA']
-        features['stop_codon_count'] = sum(sequence.count(codon) for codon in stop_codons)
         
         # Regulatory proximity
         window_size = 20
@@ -96,6 +84,28 @@ class GeneticFeatureExtractor:
                     if motif in window:
                         proximity_score += 1
         features['regulatory_proximity'] = proximity_score / max(mutant_count, 1)
+        
+        # Advanced features
+        features['sequence_entropy'] = self._calculate_entropy(sequence)
+        features['cpg_islands'] = self._count_cpg_islands(sequence)
+        features['homopolymer_runs'] = self._count_homopolymer_runs(sequence)
+        
+        # Purine/Pyrimidine ratio
+        purines = sequence.count('A') + sequence.count('G')
+        pyrimidines = sequence.count('C') + sequence.count('T')
+        features['purine_pyrimidine_ratio'] = purines / max(pyrimidines, 1)
+        
+        # Start and stop codons
+        features['start_codon_count'] = sequence.count('ATG')
+        stop_codons = ['TAA', 'TAG', 'TGA']
+        features['stop_codon_count'] = sum(sequence.count(codon) for codon in stop_codons)
+        
+        # Add all 16 dinucleotides (MUST be in this order)
+        dinucleotides = ['AA', 'AT', 'AG', 'AC', 'TA', 'TT', 'TG', 'TC',
+                        'GA', 'GT', 'GG', 'GC', 'CA', 'CT', 'CG', 'CC']
+        for dinuc in dinucleotides:
+            count = sequence.count(dinuc)
+            features[f'dinuc_{dinuc}'] = count / max(len(sequence) - 1, 1)
         
         return features
     
@@ -152,6 +162,32 @@ class GeneticFeatureExtractor:
         
         for name, pattern in mutation_patterns.items():
             features[f'{name}_count'] = sequence.count(pattern) / max(len(sequence) - len(pattern) + 1, 1)
+        
+        # ALL 3-mer k-mers (64 total: 4^3 = 64 possible combinations)
+        # This matches what the training script does
+        bases = ['A', 'T', 'G', 'C']
+        for b1 in bases:
+            for b2 in bases:
+                for b3 in bases:
+                    kmer = b1 + b2 + b3
+                    count = sequence.count(kmer)
+                    features[f'kmer_{kmer}'] = count / max(len(sequence) - 2, 1)
+        
+        # Advanced sequence features
+        features['sequence_entropy'] = self._calculate_entropy(sequence)
+        features['cpg_islands'] = self._count_cpg_islands(sequence)
+        features['homopolymer_runs'] = self._count_homopolymer_runs(sequence)
+        
+        # Transition/transversion ratio
+        transitions = sequence.count('AG') + sequence.count('GA') + sequence.count('CT') + sequence.count('TC')
+        transversions = (sequence.count('AC') + sequence.count('CA') + sequence.count('GT') + 
+                        sequence.count('TG') + sequence.count('AT') + sequence.count('TA') + 
+                        sequence.count('GC') + sequence.count('CG'))
+        features['transition_transversion_ratio'] = transitions / max(transversions, 1)
+        
+        # Deletion/insertion patterns (usually 0 in DNA sequences, but included for compatibility)
+        features['deletion_pattern_count'] = sequence.count('-')
+        features['insertion_pattern_count'] = sequence.count('+')
         
         # Structural analysis
         repeats = self._detect_tandem_repeats(sequence)

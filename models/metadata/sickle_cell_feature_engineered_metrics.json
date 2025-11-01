@@ -1,9 +1,9 @@
 {
   "model_name": "GradientBoosting",
   "data_source": "real_gene_sequences_with_feature_engineering",
-  "test_accuracy": 0.8475,
-  "cv_mean": 0.8445,
-  "cv_std": 0.020334699407662755,
+  "test_accuracy": 0.85,
+  "cv_mean": 0.8355,
+  "cv_std": 0.014265342617687096,
   "training_samples": 1600,
   "test_samples": 400,
   "features_used": 44

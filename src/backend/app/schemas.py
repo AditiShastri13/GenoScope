@@ -8,7 +8,7 @@ class HealthCheck(BaseModel):
 class PredictionResult(BaseModel):
     has_mutation: bool
     disease: str
-    confidence: float = Field(ge=0, le=1)
+    confidence: float = Field(ge=0, le=100)  # Changed to percentage (0-100)
     message: str
     details: Optional[dict] = None
 

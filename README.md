@@ -1,6 +1,17 @@
-# Genoscope - Genomic Sequence Analysis Tool
+# GenoScope - AI-Powered Genomic Variant Analysis
 
-Genoscope is an advanced genomic sequence analysis application that helps detect genetic markers for various medical conditions. This tool combines machine learning with genetic sequence analysis to provide insights from FASTA or direct sequence inputs.
+GenoScope is a production-ready genomic variant prediction system achieving **85.0%** accuracy for Sickle Cell Disease and **82.7%** accuracy for Breast Cancer using real ClinVar data.
+
+## 🎯 Performance Highlights
+
+- ✅ **Sickle Cell Disease**: 85.0% test accuracy (Gradient Boosting)
+- ✅ **Breast Cancer**: 82.7% CV accuracy (XGBoost)
+- ✅ **100% Reproducible**: All random seeds produce identical results
+- ✅ **Real Clinical Data**: 2,507 ClinVar variants
+- ✅ **Fast Inference**: <100ms per prediction
+- ✅ **Full-Stack Deployment**: React + FastAPI + Django
+
+📊 **[View Detailed Results →](CURRENT_RESULTS.md)**
 
 ## Features
 

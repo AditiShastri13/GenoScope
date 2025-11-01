@@ -1,5 +1,7 @@
 import { Button } from "./ui/button";
-import { Dna, Microscope, Home, Upload, FileText, User, LogOut } from "lucide-react";
+import { Home, Upload, FileText, User, LogOut } from "lucide-react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDna } from '@fortawesome/free-solid-svg-icons';
 
 interface NavigationProps {
   currentPage: string;
@@ -19,10 +21,14 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex items-center gap-2 text-primary cursor-pointer" onClick={() => onNavigate('dashboard')}>
-            <Dna className="w-6 h-6" />
-            <Microscope className="w-6 h-6" />
-            <span className="ml-2 text-xl">🔬 GenePredict</span>
+          <div className="flex items-center gap-3 text-primary cursor-pointer font-bold text-xl" onClick={() => onNavigate('dashboard')}>
+            <div className="relative">
+              <FontAwesomeIcon icon={faDna} className="w-7 h-7" />
+              <div className="absolute -top-1 -right-1 w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+            </div>
+            <span className="bg-clip-text text-transparent">
+              GenoScope
+            </span>
           </div>
 
           {/* Navigation Items */}

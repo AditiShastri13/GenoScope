@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
-import { Badge } from "./ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Navigation } from "./Navigation";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { fileApi, predictionApi, MutationData } from "./api/mockApi";
-import { toast } from "sonner@2.0.3";
-import { Upload, CloudUpload, Dna, FileText, TrendingUp, ArrowRight, Check } from "lucide-react";
+import { fileApi, predictionApi } from "./api/api";
+import { toast } from "sonner";
+import { Upload, CloudUpload, Dna, TrendingUp, ArrowRight, Check } from "lucide-react";
 
 interface UploadPageProps {
   onNavigate: (page: string) => void;
@@ -18,15 +16,16 @@ export function UploadPage({ onNavigate }: UploadPageProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [fileId, setFileId] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
-  const [previewData, setPreviewData] = useState<MutationData[]>([]);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [mutationsCount, setMutationsCount] = useState<number>(0);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    if (!file.name.endsWith('.csv')) {
-      toast.error("Please upload a CSV file");
+    // Accept FASTA, FA, or CSV files
+    if (!file.name.endsWith('.csv') && !file.name.endsWith('.fasta') && !file.name.endsWith('.fa')) {
+      toast.error("Please upload a CSV, FASTA, or FA file");
       return;
     }
 
@@ -34,27 +33,51 @@ export function UploadPage({ onNavigate }: UploadPageProps) {
       const response = await fileApi.uploadMutationFile(file);
       setFileId(response.file_id);
       setFileName(file.name);
-      setPreviewData(response.preview_data);
+      setUploadedFile(response.file);
       setMutationsCount(response.mutations_count);
       setIsUploaded(true);
       toast.success("File uploaded successfully!");
     } catch (error) {
       toast.error("Failed to upload file. Please try again.");
+      console.error(error);
     }
   };
 
   const handleRunPrediction = async () => {
-    if (!fileId) return;
+    if (!fileId || !uploadedFile) {
+      toast.error("No file to analyze. Please upload a file first.");
+      return;
+    }
 
+    console.log("🚀 Starting prediction...");
+    console.log("File:", uploadedFile.name);
+    
     setIsProcessing(true);
     try {
-      const result = await predictionApi.runPrediction(fileId);
-      toast.success("Analysis complete!");
-      // Store result for report page (in a real app, this would be handled by state management)
+      console.log("📡 Calling backend API...");
+      const result = await predictionApi.runPrediction(fileId, uploadedFile);
+      
+      console.log("✅ Backend response:", result);
+      console.log("Disease:", result.disease);
+      console.log("Confidence:", result.confidence);
+      console.log("Has Mutation:", result.has_mutation);
+      
+      toast.success("Analysis complete! Redirecting to results...");
+      
+      // Store result for report page
       localStorage.setItem('latest_prediction', JSON.stringify(result));
+      console.log("💾 Saved to localStorage");
+      
+      // Add to prediction history
+      const history = await predictionApi.getPredictionHistory();
+      history.unshift(result);
+      localStorage.setItem('prediction_history', JSON.stringify(history.slice(0, 10)));
+      
+      console.log("🔄 Navigating to reports...");
       onNavigate('reports');
-    } catch (error) {
-      toast.error("Prediction failed. Please try again.");
+    } catch (error: any) {
+      console.error("❌ Prediction failed:", error);
+      toast.error(error.message || "Prediction failed. Please try again.");
     } finally {
       setIsProcessing(false);
     }
@@ -94,11 +117,11 @@ export function UploadPage({ onNavigate }: UploadPageProps) {
                       </div>
                     </div>
                     <div>
-                      <h3 className="text-xl mb-2">Drop your CSV here or Browse Files</h3>
-                      <p className="text-muted-foreground mb-4">Supported formats: .csv only</p>
+                      <h3 className="text-xl mb-2">Drop your file here or Browse Files</h3>
+                      <p className="text-muted-foreground mb-4">Supported formats: .fasta, .fa, .csv</p>
                       <input
                         type="file"
-                        accept=".csv"
+                        accept=".csv,.fasta,.fa"
                         onChange={handleFileUpload}
                         className="hidden"
                         id="file-upload"
@@ -127,57 +150,6 @@ export function UploadPage({ onNavigate }: UploadPageProps) {
                 )}
               </CardContent>
             </Card>
-
-            {/* Preview Table */}
-            {isUploaded && (
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <FileText className="w-5 h-5" />
-                    Data Preview
-                  </CardTitle>
-                  <CardDescription>
-                    First 5 rows of your uploaded data
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Gene</TableHead>
-                        <TableHead>Mutation</TableHead>
-                        <TableHead>Consequence</TableHead>
-                        <TableHead>Pathogenicity</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {previewData.map((row, index) => (
-                        <TableRow key={index}>
-                          <TableCell className="font-mono">{row.gene}</TableCell>
-                          <TableCell className="font-mono text-sm">{row.mutation}</TableCell>
-                          <TableCell>
-                            <Badge variant="outline">{row.consequence}</Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Badge 
-                              className={
-                                row.pathogenicity === 'Pathogenic' 
-                                  ? 'bg-red-100 text-red-800 border-red-200'
-                                  : row.pathogenicity === 'Likely Pathogenic'
-                                  ? 'bg-orange-100 text-orange-800 border-orange-200'
-                                  : 'bg-gray-100 text-gray-800 border-gray-200'
-                              }
-                            >
-                              {row.pathogenicity}
-                            </Badge>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-            )}
 
             {/* Run Prediction Button */}
             {isUploaded && (

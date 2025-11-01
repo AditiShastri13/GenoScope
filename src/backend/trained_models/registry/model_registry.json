@@ -62,6 +62,153 @@
         "random_state": 42
       },
       "description": "Sickle cell anemia classifier trained on synthetic data"
+    },
+    {
+      "model_id": "sickle_cell_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.3",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\sickle_cell_classifier_1761934477\\sickle_cell_demo_1761934477.pkl",
+      "training_date": "2025-10-31T23:44:37.372554",
+      "metrics": {
+        "accuracy": 0.95,
+        "f1_score": 0.9499474356086206,
+        "precision": 0.9516118098968142,
+        "recall": 0.95
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 10,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Sickle cell anemia classifier trained on synthetic data"
+    },
+    {
+      "model_id": "sickle_cell_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.4",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\sickle_cell_classifier_1761934541\\sickle_cell_demo_1761934541.pkl",
+      "training_date": "2025-10-31T23:45:41.930863",
+      "metrics": {
+        "accuracy": 0.95,
+        "f1_score": 0.9499474356086206,
+        "precision": 0.9516118098968142,
+        "recall": 0.95
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 10,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Sickle cell anemia classifier trained on synthetic data"
+    },
+    {
+      "model_id": "sickle_cell_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.5",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\sickle_cell_classifier_1761934950\\sickle_cell_demo_1761934950.pkl",
+      "training_date": "2025-10-31T23:52:30.278882",
+      "metrics": {
+        "accuracy": 0.95,
+        "f1_score": 0.9499474356086206,
+        "precision": 0.9516118098968142,
+        "recall": 0.95
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 10,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Sickle cell anemia classifier trained on synthetic data"
+    },
+    {
+      "model_id": "sickle_cell_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.6",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\sickle_cell_classifier_1761935125\\sickle_cell_demo_1761935125.pkl",
+      "training_date": "2025-10-31T23:55:25.922699",
+      "metrics": {
+        "accuracy": 0.95,
+        "f1_score": 0.9499474356086206,
+        "precision": 0.9516118098968142,
+        "recall": 0.95
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 10,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Sickle cell anemia classifier trained on synthetic data"
+    },
+    {
+      "model_id": "sickle_cell_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.7",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\sickle_cell_classifier_1761935349\\sickle_cell_demo_1761935349.pkl",
+      "training_date": "2025-10-31T23:59:09.277403",
+      "metrics": {
+        "accuracy": 0.95,
+        "f1_score": 0.9499474356086206,
+        "precision": 0.9516118098968142,
+        "recall": 0.95
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 10,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Sickle cell anemia classifier trained on synthetic data"
+    },
+    {
+      "model_id": "sickle_cell_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.8",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\sickle_cell_classifier_1761935651\\sickle_cell_demo_1761935651.pkl",
+      "training_date": "2025-11-01T00:04:11.320759",
+      "metrics": {
+        "accuracy": 0.95,
+        "f1_score": 0.9499474356086206,
+        "precision": 0.9516118098968142,
+        "recall": 0.95
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 10,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Sickle cell anemia classifier trained on synthetic data"
+    },
+    {
+      "model_id": "sickle_cell_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.9",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\sickle_cell_classifier_1761967227\\sickle_cell_demo_1761967227.pkl",
+      "training_date": "2025-11-01T08:50:27.995360",
+      "metrics": {
+        "accuracy": 0.9825,
+        "f1_score": 0.9824961707022776,
+        "precision": 0.9827996446802122,
+        "recall": 0.9825
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 10,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Sickle cell anemia classifier trained on synthetic data"
     }
   ],
   "breast_cancer_classifier": [
@@ -118,6 +265,153 @@
         "f1_score": 0.9249774909963986,
         "precision": 0.9253717053390403,
         "recall": 0.925
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 12,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Breast cancer classifier trained on synthetic data"
+    },
+    {
+      "model_id": "breast_cancer_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.3",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\breast_cancer_classifier_1761934477\\breast_cancer_demo_1761934477.pkl",
+      "training_date": "2025-10-31T23:44:37.375200",
+      "metrics": {
+        "accuracy": 0.925,
+        "f1_score": 0.9249774909963986,
+        "precision": 0.9253717053390403,
+        "recall": 0.925
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 12,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Breast cancer classifier trained on synthetic data"
+    },
+    {
+      "model_id": "breast_cancer_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.4",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\breast_cancer_classifier_1761934541\\breast_cancer_demo_1761934541.pkl",
+      "training_date": "2025-10-31T23:45:41.933920",
+      "metrics": {
+        "accuracy": 0.925,
+        "f1_score": 0.9249774909963986,
+        "precision": 0.9253717053390403,
+        "recall": 0.925
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 12,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Breast cancer classifier trained on synthetic data"
+    },
+    {
+      "model_id": "breast_cancer_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.5",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\breast_cancer_classifier_1761934950\\breast_cancer_demo_1761934950.pkl",
+      "training_date": "2025-10-31T23:52:30.281975",
+      "metrics": {
+        "accuracy": 0.925,
+        "f1_score": 0.9249774909963986,
+        "precision": 0.9253717053390403,
+        "recall": 0.925
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 12,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Breast cancer classifier trained on synthetic data"
+    },
+    {
+      "model_id": "breast_cancer_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.6",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\breast_cancer_classifier_1761935125\\breast_cancer_demo_1761935125.pkl",
+      "training_date": "2025-10-31T23:55:25.925457",
+      "metrics": {
+        "accuracy": 0.925,
+        "f1_score": 0.9249774909963986,
+        "precision": 0.9253717053390403,
+        "recall": 0.925
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 12,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Breast cancer classifier trained on synthetic data"
+    },
+    {
+      "model_id": "breast_cancer_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.7",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\breast_cancer_classifier_1761935349\\breast_cancer_demo_1761935349.pkl",
+      "training_date": "2025-10-31T23:59:09.280808",
+      "metrics": {
+        "accuracy": 0.925,
+        "f1_score": 0.9249774909963986,
+        "precision": 0.9253717053390403,
+        "recall": 0.925
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 12,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Breast cancer classifier trained on synthetic data"
+    },
+    {
+      "model_id": "breast_cancer_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.8",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\breast_cancer_classifier_1761935651\\breast_cancer_demo_1761935651.pkl",
+      "training_date": "2025-11-01T00:04:11.324060",
+      "metrics": {
+        "accuracy": 0.925,
+        "f1_score": 0.9249774909963986,
+        "precision": 0.9253717053390403,
+        "recall": 0.925
+      },
+      "parameters": {
+        "n_estimators": 100,
+        "max_depth": 12,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "random_state": 42
+      },
+      "description": "Breast cancer classifier trained on synthetic data"
+    },
+    {
+      "model_id": "breast_cancer_classifier",
+      "model_type": "random_forest",
+      "version": "1.0.9",
+      "path": "E:\\genoscope\\src\\backend\\trained_models\\registry\\breast_cancer_classifier_1761967227\\breast_cancer_demo_1761967227.pkl",
+      "training_date": "2025-11-01T08:50:27.998428",
+      "metrics": {
+        "accuracy": 0.94,
+        "f1_score": 0.9399699812382738,
+        "precision": 0.9406934041433904,
+        "recall": 0.94
       },
       "parameters": {
         "n_estimators": 100,

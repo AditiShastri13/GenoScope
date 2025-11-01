@@ -52,9 +52,10 @@ async def startup_event():
     """Initialize models on startup"""
     try:
         classifier._load_models()
-        print("Models loaded successfully!")
-    except:
-        print("Training demo models...")
+        print("✅ Production models loaded successfully!")
+    except Exception as e:
+        print(f"❌ Failed to load production models: {e}")
+        print("⚠️  Training demo models as fallback...")
         classifier.train_demo_models()
 
 @app.get("/", response_model=HealthCheck)
@@ -176,43 +177,70 @@ async def predict_mutation(file: UploadFile = File(...), analysis_type: str = "c
         sickle_cell_pred, sickle_cell_prob = classifier.predict(sequence, "sickle_cell")
         breast_cancer_pred, breast_cancer_prob = classifier.predict(sequence, "breast_cancer")
 
-        # Determine results
+        # Calculate GC content
+        gc_content = round((sequence.count('G') + sequence.count('C')) / len(sequence), 3)
+        
+        # Prepare sickle cell results (convert to percentage)
+        sickle_cell_risk = "high" if sickle_cell_prob > 0.8 else "moderate" if sickle_cell_prob > 0.5 else "low"
+        sickle_cell_results = {
+            "has_mutation": bool(sickle_cell_pred == 1),
+            "confidence": round(sickle_cell_prob * 100, 1),  # Convert to percentage
+            "risk_level": sickle_cell_risk
+        }
+        
+        # Prepare breast cancer results (convert to percentage)
+        breast_cancer_risk = "high" if breast_cancer_prob > 0.8 else "moderate" if breast_cancer_prob > 0.5 else "low"
+        breast_cancer_results = {
+            "has_mutation": bool(breast_cancer_pred == 1),
+            "confidence": round(breast_cancer_prob * 100, 1),  # Convert to percentage
+            "risk_level": breast_cancer_risk
+        }
+
+        # Determine primary result (whichever has higher confidence)
         if sickle_cell_pred == 1 and sickle_cell_prob > breast_cancer_prob:
-            return PredictionResult(
-                has_mutation=True,
-                disease="Sickle Cell Anemia",
-                confidence=round(sickle_cell_prob, 3),
-                message="Mutation detected associated with Sickle Cell Anemia. HBB gene variant likely present.",
-                details={
-                    "sequence_length": len(sequence),
-                    "gc_content": round((sequence.count('G') + sequence.count('C')) / len(sequence), 3),
-                    "risk_level": "high" if sickle_cell_prob > 0.8 else "moderate"
-                }
-            )
+            primary_disease = "Sickle Cell Anemia"
+            primary_confidence = round(sickle_cell_prob * 100, 1)  # Percentage
+            primary_has_mutation = True
+            message = f"Mutation detected associated with Sickle Cell Anemia (Confidence: {sickle_cell_prob*100:.1f}%). HBB gene variant likely present."
+            risk_level = sickle_cell_risk
+        elif breast_cancer_pred == 1 and breast_cancer_prob > sickle_cell_prob:
+            primary_disease = "Breast Cancer"
+            primary_confidence = round(breast_cancer_prob * 100, 1)  # Percentage
+            primary_has_mutation = True
+            message = f"Mutation detected associated with Breast Cancer (Confidence: {breast_cancer_prob*100:.1f}%). BRCA1/BRCA2 or related gene variant likely present."
+            risk_level = breast_cancer_risk
+        elif sickle_cell_pred == 1:
+            primary_disease = "Sickle Cell Anemia"
+            primary_confidence = round(sickle_cell_prob * 100, 1)  # Percentage
+            primary_has_mutation = True
+            message = f"Mutation detected associated with Sickle Cell Anemia (Confidence: {sickle_cell_prob*100:.1f}%). HBB gene variant likely present."
+            risk_level = sickle_cell_risk
         elif breast_cancer_pred == 1:
-            return PredictionResult(
-                has_mutation=True,
-                disease="Breast Cancer",
-                confidence=round(breast_cancer_prob, 3),
-                message="Mutation detected associated with Breast Cancer. BRCA1/BRCA2 or related gene variant likely present.",
-                details={
-                    "sequence_length": len(sequence),
-                    "gc_content": round((sequence.count('G') + sequence.count('C')) / len(sequence), 3),
-                    "risk_level": "high" if breast_cancer_prob > 0.8 else "moderate"
-                }
-            )
+            primary_disease = "Breast Cancer"
+            primary_confidence = round(breast_cancer_prob * 100, 1)  # Percentage
+            primary_has_mutation = True
+            message = f"Mutation detected associated with Breast Cancer (Confidence: {breast_cancer_prob*100:.1f}%). BRCA1/BRCA2 or related gene variant likely present."
+            risk_level = breast_cancer_risk
         else:
-            return PredictionResult(
-                has_mutation=False,
-                disease="None",
-                confidence=0.0,
-                message="No known mutations detected for the analyzed diseases. Sequence appears normal.",
-                details={
-                    "sequence_length": len(sequence),
-                    "gc_content": round((sequence.count('G') + sequence.count('C')) / len(sequence), 3),
-                    "risk_level": "low"
-                }
-            )
+            primary_disease = "None"
+            primary_confidence = round(max(sickle_cell_prob, breast_cancer_prob) * 100, 1)  # Percentage
+            primary_has_mutation = False
+            message = f"No known mutations detected for the analyzed diseases. Sickle Cell: {sickle_cell_prob*100:.1f}%, Breast Cancer: {breast_cancer_prob*100:.1f}%"
+            risk_level = "low"
+
+        return PredictionResult(
+            has_mutation=primary_has_mutation,
+            disease=primary_disease,
+            confidence=primary_confidence,
+            message=message,
+            details={
+                "sequence_length": len(sequence),
+                "gc_content": gc_content,
+                "risk_level": risk_level,
+                "sickle_cell": sickle_cell_results,
+                "breast_cancer": breast_cancer_results
+            }
+        )
 
     except HTTPException:
         raise
